@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from fastapi import HTTPException, status
 
 from app.core.config import setting
 
@@ -57,3 +58,30 @@ def decode_token(token: str,expected_type: str | None = None) -> dict:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
         )
+
+
+def _create_token(
+    data: dict | None = None,
+    expires_delta: timedelta | None = None,
+    token_type: str = "access"
+) -> str:
+    if data is None:
+        data = {}
+    
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    
+    payload = {
+        "exp": expire,
+        "iat": datetime.now(timezone.utc),
+        **data,
+        "type": token_type
+    }
+    
+    return jwt.encode(
+        payload,
+        setting.SECRET_KEY,
+        algorithm=setting.ALGORITHM
+    )

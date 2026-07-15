@@ -37,6 +37,7 @@ class Decision(Base):
 
     department: Mapped[str | None] = mapped_column(
         String(100),
+        nullable=True,
     )
 
     problem_statement: Mapped[str] = mapped_column(
@@ -51,11 +52,13 @@ class Decision(Base):
 
     reason: Mapped[str | None] = mapped_column(
         Text,
+        nullable=True,
     )
 
     status: Mapped[DecisionStatus] = mapped_column(
         Enum(DecisionStatus),
         default=DecisionStatus.DRAFT,
+        nullable=False,
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -69,43 +72,21 @@ class Decision(Base):
         onupdate=func.now(),
     )
 
-    creator = relationship(
+    # Relationships
+
+    creator: Mapped["User"] = relationship(
         "User",
         back_populates="decisions",
     )
 
-    documents = relationship(
+    documents: Mapped[list["Document"]] = relationship(
         "Document",
         back_populates="decision",
         cascade="all, delete-orphan",
     )
 
-    analyses = relationship(
+    analyses: Mapped[list["DecisionAnalysis"]] = relationship(
         "DecisionAnalysis",
-        back_populates="decision",
-        cascade="all, delete-orphan",
-    )
-
-    outcomes = relationship(
-        "DecisionOutcome",
-        back_populates="decision",
-        cascade="all, delete-orphan",
-    )
-
-    versions = relationship(
-        "DecisionVersion",
-        back_populates="decision",
-        cascade="all, delete-orphan",
-    )
-
-    comments = relationship(
-        "Comment",
-        back_populates="decision",
-        cascade="all, delete-orphan",
-    )
-
-    embeddings = relationship(
-        "Embedding",
         back_populates="decision",
         cascade="all, delete-orphan",
     )

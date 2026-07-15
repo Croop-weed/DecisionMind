@@ -70,7 +70,7 @@ class DecisionAnalysis(Base):
         server_default=func.now(),
     )
 
-    decision = relationship(
+    decision: Mapped["Decision"] = relationship(
         "Decision",
         back_populates="analyses",
     )

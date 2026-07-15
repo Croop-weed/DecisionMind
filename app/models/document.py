@@ -68,9 +68,12 @@ class Document(Base):
         server_default=func.now(),
     )
 
-    decision = relationship(
+    decision: Mapped["Decision"] = relationship(
         "Decision",
         back_populates="documents",
     )
 
-    uploader = relationship("User")
+    uploader: Mapped["User"] = relationship(
+        "User",
+        back_populates="uploaded_documents",
+    )

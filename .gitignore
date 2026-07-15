@@ -9,6 +9,7 @@ wheels/
 .venv
 
 .env
+/readme files
 
 # Logs
 logs

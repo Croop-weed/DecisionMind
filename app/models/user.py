@@ -57,8 +57,14 @@ class User(Base):
         onupdate=func.now(),
     )
 
-    decisions = relationship(
+    decisions: Mapped[list["Decision"]] = relationship(
         "Decision",
         back_populates="creator",
+        cascade="all, delete-orphan",
+    )
+
+    uploaded_documents: Mapped[list["Document"]] = relationship(
+        "Document",
+        back_populates="uploader",
         cascade="all, delete-orphan",
     )
