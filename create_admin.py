@@ -19,7 +19,7 @@ from app.models.enums import UserRole
 
 async def create_admin():
     """Create an initial admin user if one doesn't exist."""
-    admin_email = "admin@decisionmind.local"
+    admin_email = "admin@decisionmind.com"
     
     async with AsyncSessionLocal() as session:
         try:
