@@ -10,8 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.repositories.user_repository import UserRepository
+from app.repositories.decision_repository import DecisionRepository
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
+from app.services.decision_service import DecisionService
 
 
 async def get_user_repository(
@@ -33,3 +35,17 @@ async def get_auth_service(
 ) -> AuthService:
     """Provide AuthService instance."""
     return AuthService(repository)
+
+
+async def get_decision_repository(
+    db: AsyncSession = Depends(get_db),
+) -> DecisionRepository:
+    """Provide DecisionRepository instance."""
+    return DecisionRepository(db)
+
+
+async def get_decision_service(
+    repository: DecisionRepository = Depends(get_decision_repository),
+) -> DecisionService:
+    """Provide DecisionService instance."""
+    return DecisionService(repository)

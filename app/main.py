@@ -11,9 +11,11 @@ app = FastAPI(
 
 from app.api.v1.auth import router as auth_router
 from app.api.v1.user import router as user_router
+from app.api.v1.decision import router as decision_router
 
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(decision_router)
 
 @app.get("/health", tags=["Health"])
 async def health_check(db: AsyncSession = Depends(get_db)):
